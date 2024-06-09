@@ -4,6 +4,7 @@ import dev.ramimans.refsave.dto.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
@@ -13,6 +14,8 @@ import java.sql.SQLException;
 public class UserDaoImpl {
     @Autowired
     JdbcTemplate jdbc;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     public UserDaoImpl(JdbcTemplate jdbc) {
         this.jdbc = jdbc;
@@ -25,7 +28,7 @@ public class UserDaoImpl {
 
     public void createUser (User user) {
         String query = "Insert Into Users (username, passphrase, id) Values (?, ?, ?)";
-        jdbc.update(query, user.getUsername(), user.getPassword(), user.getId());
+        jdbc.update(query, user.getUsername(), passwordEncoder.encode(user.getPassword()), user.getId());
     }
 
     private static class UserMapper implements RowMapper<User> {
