@@ -10,7 +10,7 @@ import dev.ramimans.refsave.dto.Book;
 import dev.ramimans.refsave.dto.Category;
 import dev.ramimans.refsave.dto.Film;
 import dev.ramimans.refsave.dto.Reference;
-import dev.ramimans.refsave.dto.Tv;
+import dev.ramimans.refsave.dto.TV;
 import dev.ramimans.refsave.dto.Website;
 import static dev.ramimans.refsave.dao.mapper.ReferenceFieldsExtractor.*;
 
@@ -51,7 +51,7 @@ public class ReferenceDaoImpl {
         return userRef;
     }
 
-    public Tv createRef(String username, Tv tv) {
+    public TV createRef(String username, TV tv) {
         Map<String, String> fields = getNewRefFields(tv);
         String query = CREATE_PREFIX + TIMEPOINT + CREATE_SUFFIX; 
         jdbc.update(query, fields.get("id"), fields.get("label"), fields.get("title"), 
@@ -87,7 +87,7 @@ public class ReferenceDaoImpl {
         return website;
     }
 
-    public void updateRef(String username, Tv tv) {
+    public void updateRef(String username, TV tv) {
         Map<String, String> fields = getNewRefFields(tv);
         String query = UPDATE_PREFIX + TIMEPOINT + UPDATE_SUFFIX;
         jdbc.update(query, fields.get("label"), fields.get("title"), fields.get("notes"), tv.getTimepoint(),

@@ -14,7 +14,7 @@ import dev.ramimans.refsave.dto.Book;
 import dev.ramimans.refsave.dto.Category;
 import dev.ramimans.refsave.dto.Film;
 import dev.ramimans.refsave.dto.Reference;
-import dev.ramimans.refsave.dto.Tv;
+import dev.ramimans.refsave.dto.TV;
 import dev.ramimans.refsave.dto.Website;
 import static dev.ramimans.refsave.dao.mapper.ReferenceFieldsExtractor.*;
 
@@ -38,7 +38,7 @@ public class ReferenceMapper implements RowMapper<Reference>{
         switch (category) {
             case TV:
                 timePoint = LocalTime.parse(timepoint, timeFormatter);
-                Tv tv = new Tv(id, created, label, title, notes, timePoint);
+                TV tv = new TV(id, created, label, title, notes, timePoint);
                 return tv;
             case FILM:
                 timePoint = LocalTime.parse(timepoint, timeFormatter);

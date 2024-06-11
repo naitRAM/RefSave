@@ -71,11 +71,11 @@ public class ReferenceController {
         return new ResponseEntity<Website>(createdWebsite, HttpStatus.CREATED);
     }
     @PostMapping("/tv")
-    public ResponseEntity<Tv> createRef(@PathVariable String username, @RequestBody Tv tv) {
+    public ResponseEntity<TV> createRef(@PathVariable String username, @RequestBody TV tv) {
         tv.setId(UUID.randomUUID().toString());
         tv.setCreated(LocalDateTime.now());
-        Tv createdTv = refDao.createRef(username, tv);
-        return new ResponseEntity<Tv>(createdTv, HttpStatus.CREATED);
+        TV createdTV = refDao.createRef(username, tv);
+        return new ResponseEntity<TV>(createdTV, HttpStatus.CREATED);
     }
     @PostMapping("/film")
     public ResponseEntity<Film> createdRef(@PathVariable String username, @RequestBody Film film) {
@@ -99,7 +99,7 @@ public class ReferenceController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     @PutMapping("/tv")
-    public ResponseEntity<Tv> updateRef(@PathVariable String username, @RequestBody Tv tv) {
+    public ResponseEntity<TV> updateRef(@PathVariable String username, @RequestBody TV tv) {
         Reference stored = refDao.readReference(username, tv.getId());
         tv.setCreated(stored.getCreated());
         refDao.updateRef(username, tv);

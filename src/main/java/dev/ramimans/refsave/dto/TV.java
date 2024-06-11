@@ -3,16 +3,16 @@ package dev.ramimans.refsave.dto;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class Tv extends Reference {
+public class TV extends Reference {
 
     private LocalTime timepoint;
 
-    public Tv () {
+    public TV() {
         super();
         setCategory(Category.TV);
     }
 
-    public Tv (String id, LocalDateTime created, String label, String title, String notes, LocalTime timepoint) {
+    public TV(String id, LocalDateTime created, String label, String title, String notes, LocalTime timepoint) {
         super(id, created, label, title, notes);
         setCategory(Category.TV);
         this.timepoint = timepoint;
