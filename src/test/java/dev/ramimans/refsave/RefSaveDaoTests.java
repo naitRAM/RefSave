@@ -182,6 +182,87 @@ public class RefSaveDaoTests {
         assertEquals("size of websites is not 1", websites.size(), 1);
     }
 
+    @Test
+    public void testUpdateBook() {
+        String id = UUID.randomUUID().toString();
+        LocalDateTime created = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        String label = "A Homer reference";
+        String title = "The Odyssey of Homer";
+        String notes = "That was epic!";
+        int pageNumber = 195;
+        Book book = new Book(id, created, label, title, notes, pageNumber);
+        referenceDaoImpl.createRef(TEST_USER, book);
+        book.setNotes("That was an epic battle!");
+        book.setPageNumber(145);
+        referenceDaoImpl.updateRef(TEST_USER, book);
+        Reference reference = referenceDaoImpl.readReference(TEST_USER, id);
+        assertEquals("book is not equal to updated reference", reference, book);
+        List<Reference> allReferences = referenceDaoImpl.readReferences(TEST_USER);
+        assertEquals("size of allReferences is not 1", allReferences.size(), 1);
+    }
+
+    @Test
+    public void testUpdateTV() {
+        String id = UUID.randomUUID().toString();
+        LocalDateTime created = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        String label = "Mr Robot opening scene";
+        String title = "Mr Robot S01E01";
+        String notes = "this gave me goosebumps!";
+        String timepoint = "00:00:00";
+        TV tv = new TV(id, created, label, title, notes, LocalTime.parse(timepoint));
+        referenceDaoImpl.createRef(TEST_USER, tv);
+        tv.setLabel("Mr Robot season 1 finale");
+        tv.setTitle("Mr Robot S01E10");
+        tv.setNotes("Don't open the trunk!!!!");
+        tv.setTimepoint(LocalTime.parse("00:48:29"));
+        referenceDaoImpl.updateRef(TEST_USER, tv);
+        Reference reference = referenceDaoImpl.readReference(TEST_USER, id);
+        assertEquals("tv is not equal to updated reference", reference, tv);
+        List<Reference> allReferences = referenceDaoImpl.readReferences(TEST_USER);
+        assertEquals("size of allReferences is not 1", allReferences.size(), 1);
+    }
+
+    @Test
+    public void testUpdateFilm() {
+        String id = UUID.randomUUID().toString();
+        LocalDateTime created = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        String label = "A Lord of the Ring reference";
+        String title = "Fellowship of the Ring";
+        String notes = "epic scene!";
+        String timepoint = "02:04:38";
+        Film film = new Film(id, created, label, title, notes, LocalTime.parse(timepoint));
+        referenceDaoImpl.createRef(TEST_USER, film);
+        film.setNotes("epic scene, Boromir redeems himself!");
+        film.setTimepoint(LocalTime.parse("03:04:38"));
+        referenceDaoImpl.updateRef(TEST_USER, film);
+        Reference reference = referenceDaoImpl.readReference(TEST_USER, id);
+        assertEquals("film is not equal to updated reference", reference, film);
+        List<Reference> allReferences = referenceDaoImpl.readReferences(TEST_USER);
+        assertEquals("size of allReferences is not 1", allReferences.size(), 1);
+    }
+
+    @Test
+    public void testUpdateWebsite() throws MalformedURLException {
+        String id = UUID.randomUUID().toString();
+        LocalDateTime created = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        String label = "A MySQL Docs reference";
+        String title = null;
+        String notes = "this is the coolest website ever!";
+        URL url = new URL("https://dev.mysql.com/doc");
+        Website website = new Website(id, created, label, title, notes, url);
+        referenceDaoImpl.createRef(TEST_USER, website);
+        website.setUrl(new URL("https://start.spring.io"));
+        website.setLabel("Create a new Spring Boot project");
+        website.setTitle("Spring Initializr");
+        website.setNotes("this is actually the ultimate site");
+        referenceDaoImpl.updateRef(TEST_USER, website);
+        Reference reference = referenceDaoImpl.readReference(TEST_USER, id);
+        assertEquals("website is not equal to updated reference", reference, website);
+        List<Reference> allReferences = referenceDaoImpl.readReferences(TEST_USER);
+        assertEquals("size of allReferences is not 1", allReferences.size(), 1);
+    }
+
+
 
 }
 
