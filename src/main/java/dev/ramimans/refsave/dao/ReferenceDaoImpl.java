@@ -33,24 +33,28 @@ public class ReferenceDaoImpl implements ReferenceDao{
     private final String UPDATE_PREFIX = "UPDATE Ref SET label = ?, title = ?, notes = ?, ";
     private final String UPDATE_SUFFIX = " = ? WHERE id = ? AND user_id = (SELECT user_id from users WHERE username = ?);";
 
+    @Override
     public List<Reference> readReferences(String username) {
         String query = GET_ALL_USER_REFS;
         List<Reference> userRefs = jdbc.query(query, new ReferenceMapper(), username);
         return userRefs;
     }
 
+    @Override
     public List<Reference> readReferencesByCategory(String username, Category category) {
         String query = GET_ALL_USER_REFS + "AND UPPER(Category.title) = ?"; 
         List<Reference> userRefs = jdbc.query(query, new ReferenceMapper(), username, category.name());
         return userRefs;
     }
 
+    @Override
     public Reference readReference(String username, String refId) {
         String query = GET_ALL_USER_REFS + "AND Ref.id = ?";
         Reference userRef = jdbc.queryForObject(query, new ReferenceMapper(), username, refId);
         return userRef;
     }
 
+    @Override
     public TV createRef(String username, TV tv) {
         Map<String, String> fields = getNewRefFields(tv);
         String query = CREATE_PREFIX + TIMEPOINT + CREATE_SUFFIX; 
@@ -61,6 +65,7 @@ public class ReferenceDaoImpl implements ReferenceDao{
         return tv;
     }
 
+    @Override
     public Film createRef(String username, Film film) {
         Map<String, String> fields = getNewRefFields(film);
         String query = CREATE_PREFIX + TIMEPOINT + CREATE_SUFFIX;
@@ -70,6 +75,7 @@ public class ReferenceDaoImpl implements ReferenceDao{
         return film;
     }
 
+    @Override
     public Book createRef(String username, Book book) {
         Map<String, String> fields = getNewRefFields(book);
         String query = CREATE_PREFIX + PAGE_NUMBER + CREATE_SUFFIX;
@@ -78,6 +84,7 @@ public class ReferenceDaoImpl implements ReferenceDao{
         return book;
     }
 
+    @Override
     public Website createRef(String username, Website website) {
         Map<String, String> fields = getNewRefFields(website);
         String query = CREATE_PREFIX + URL + CREATE_SUFFIX;
@@ -87,6 +94,7 @@ public class ReferenceDaoImpl implements ReferenceDao{
         return website;
     }
 
+    @Override
     public void updateRef(String username, TV tv) {
         Map<String, String> fields = getNewRefFields(tv);
         String query = UPDATE_PREFIX + TIMEPOINT + UPDATE_SUFFIX;
@@ -94,6 +102,7 @@ public class ReferenceDaoImpl implements ReferenceDao{
             tv.getId(), username);
     }
 
+    @Override
     public void updateRef(String username, Film film) {
         Map<String, String> fields = getNewRefFields(film);
         String query = UPDATE_PREFIX + TIMEPOINT + UPDATE_SUFFIX;
@@ -101,6 +110,7 @@ public class ReferenceDaoImpl implements ReferenceDao{
             film.getId(), username);
     }
 
+    @Override
     public void updateRef(String username, Book book) {
         Map<String, String> fields = getNewRefFields(book);
         String query = UPDATE_PREFIX + PAGE_NUMBER + UPDATE_SUFFIX;
@@ -108,6 +118,7 @@ public class ReferenceDaoImpl implements ReferenceDao{
             book.getId(), username);
     }
 
+    @Override
     public void updateRef(String username, Website website) {
         Map<String, String> fields = getNewRefFields(website);
         String query = UPDATE_PREFIX + URL + UPDATE_SUFFIX;
@@ -115,6 +126,7 @@ public class ReferenceDaoImpl implements ReferenceDao{
             website.getId(), username);
     }
 
+    @Override
     public void deleteRef(String username, Reference ref) {
         final String query ="DELETE FROM Ref WHERE user_id = (SELECT ID FROM Users WHERE username = ?) AND id = ?";
         jdbc.update(query, username, ref.getId());

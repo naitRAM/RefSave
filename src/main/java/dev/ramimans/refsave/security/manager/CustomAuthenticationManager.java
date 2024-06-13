@@ -1,7 +1,9 @@
 package dev.ramimans.refsave.security.manager;
 
 import dev.ramimans.refsave.dao.UserDaoImpl;
+import dev.ramimans.refsave.dao.mapper.UserDao;
 import dev.ramimans.refsave.dto.User;
+import dev.ramimans.refsave.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,16 +18,17 @@ import java.util.ArrayList;
 @Component
 public class CustomAuthenticationManager implements AuthenticationManager {
     @Autowired
-    private UserDaoImpl userDao;
+    private UserService userService;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    public CustomAuthenticationManager(UserDaoImpl userDao, PasswordEncoder passwordEncoder) {
-        this.userDao = userDao;
+
+    public CustomAuthenticationManager(UserService userService, PasswordEncoder passwordEncoder) {
+        this.userService = userService;
         this.passwordEncoder = passwordEncoder;
     }
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        User user = userDao.readUser(authentication.getName());
+        User user = userService.readUser(authentication.getName());
         if (passwordEncoder.matches(authentication.getCredentials().toString(), user.getPassword())) {
             return new UsernamePasswordAuthenticationToken(authentication.getName(), null, new ArrayList<>());
         }

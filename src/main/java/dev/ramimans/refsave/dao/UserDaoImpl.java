@@ -17,21 +17,22 @@ import java.sql.SQLException;
 public class UserDaoImpl implements UserDao {
     @Autowired
     JdbcTemplate jdbc;
-    @Autowired
-    PasswordEncoder passwordEncoder;
+
 
     public UserDaoImpl(JdbcTemplate jdbc) {
         this.jdbc = jdbc;
     }
 
+    @Override
     public User readUser (String username) {
         String query = "Select * From Users Where username = ?";
         return jdbc.queryForObject(query, new UserMapper(), username);
     }
 
-    public void createUser (@RequestBody @Valid User user) {
+    @Override
+    public void createUser (User user) {
         String query = "Insert Into Users (username, passphrase, id) Values (?, ?, ?)";
-        jdbc.update(query, user.getUsername(), passwordEncoder.encode(user.getPassword()), user.getId());
+        jdbc.update(query, user.getUsername(), user.getPassword(), user.getId());
     }
 
     private static class UserMapper implements RowMapper<User> {
