@@ -13,8 +13,8 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
-import static org.springframework.test.util.AssertionErrors.assertEquals;
-import static org.springframework.test.util.AssertionErrors.assertTrue;
+
+import static org.springframework.test.util.AssertionErrors.*;
 
 @SpringBootTest
 public class RefSaveDaoTests {
@@ -101,7 +101,7 @@ public class RefSaveDaoTests {
         String labelBook = "A Homer reference";
         String labelTV = "Mr Robot opening scene";
         String labelFilm = "A Lord of the Ring reference";
-        String labelWebsite = "A Lord of the Ring reference";
+        String labelWebsite = "A MySQL Docs reference";
         String titleBook = "The Odyssey of Homer";
         String titleTV = "Mr Robot S01E01";
         String titleFilm = "The Fellowship of the Ring";
@@ -142,7 +142,7 @@ public class RefSaveDaoTests {
         String labelBook = "A Homer reference";
         String labelTV = "Mr Robot opening scene";
         String labelFilm = "A Lord of the Ring reference";
-        String labelWebsite = "A Lord of the Ring reference";
+        String labelWebsite = "A MySQL Docs reference";
         String titleBook = "The Odyssey of Homer";
         String titleTV = "Mr Robot S01E01";
         String titleFilm = "The Fellowship of the Ring";
@@ -260,6 +260,38 @@ public class RefSaveDaoTests {
         assertEquals("website is not equal to updated reference", reference, website);
         List<Reference> allReferences = referenceDaoImpl.readReferences(TEST_USER);
         assertEquals("size of allReferences is not 1", allReferences.size(), 1);
+    }
+
+    @Test
+    public void testDeleteReference() throws MalformedURLException {
+        String idBook = UUID.randomUUID().toString();
+        String idWebsite = UUID.randomUUID().toString();
+        LocalDateTime createdBook = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        LocalDateTime createdWebsite = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        String labelBook = "A Homer reference";
+        String labelWebsite = "A MySQL Docs reference";
+        String titleBook = "The Odyssey of Homer";
+        String titleWebsite = null;
+        String notesBook = "That was epic!";
+        String notesWebsite = "this is the coolest website ever!";
+        int pageNumber = 195;
+        URL url = new URL("https://dev.mysql.com/doc");
+        Book book = new Book(idBook, createdBook, labelBook, titleBook, notesBook, pageNumber);
+        Website website = new Website(idWebsite, createdWebsite, labelWebsite, titleWebsite, notesWebsite, url);
+        referenceDaoImpl.createRef(TEST_USER, book);
+        referenceDaoImpl.createRef(TEST_USER, website);
+        List<Reference> allReferences = referenceDaoImpl.readReferences(TEST_USER);
+        assertEquals("size of allReferences is not 2", allReferences.size(), 2);
+        assertTrue("allReferences does not contain book", allReferences.contains(book));
+        assertTrue("allReferences does not contain website", allReferences.contains(website));
+        referenceDaoImpl.deleteRef(TEST_USER, book);
+        allReferences = referenceDaoImpl.readReferences(TEST_USER);
+        assertEquals("size of allReferences is not 1", allReferences.size(), 1);
+        assertFalse("allReferences contains book", allReferences.contains(book));
+        assertTrue("allReferences does not contain website", allReferences.contains(website));
+        referenceDaoImpl.deleteRef(TEST_USER, website);
+        allReferences = referenceDaoImpl.readReferences(TEST_USER);
+        assertTrue("allReferences is not empty", allReferences.isEmpty());
     }
 
 
