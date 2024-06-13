@@ -1,4 +1,5 @@
 package dev.ramimans.refsave;
+import dev.ramimans.refsave.dao.ReferenceDao;
 import dev.ramimans.refsave.dao.ReferenceDaoImpl;
 import dev.ramimans.refsave.dto.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,13 +20,13 @@ import static org.springframework.test.util.AssertionErrors.*;
 @SpringBootTest
 public class RefSaveDaoTests {
     @Autowired
-    ReferenceDaoImpl referenceDaoImpl;
+    ReferenceDao referenceDao;
     private String TEST_USER="Majid";
     @BeforeEach
     public void setUp() {
-        List<Reference> allReferences = referenceDaoImpl.readReferences(TEST_USER);
+        List<Reference> allReferences = referenceDao.readReferences(TEST_USER);
         for (Reference ref : allReferences) {
-            referenceDaoImpl.deleteRef(TEST_USER, ref);
+            referenceDao.deleteRef(TEST_USER, ref);
         }
     }
     @Test
@@ -37,10 +38,10 @@ public class RefSaveDaoTests {
         String notes = "That was epic!";
         int pageNumber = 195;
         Book book = new Book(id, created, label, title, notes, pageNumber);
-        referenceDaoImpl.createRef(TEST_USER, book);
-        Reference reference = referenceDaoImpl.readReference(TEST_USER, id);
+        referenceDao.createRef(TEST_USER, book);
+        Reference reference = referenceDao.readReference(TEST_USER, id);
         assertEquals("book is not equal to retrieved reference", reference, book);
-        List<Reference> allReferences = referenceDaoImpl.readReferences(TEST_USER);
+        List<Reference> allReferences = referenceDao.readReferences(TEST_USER);
         assertEquals("size of allReferences is not 1", allReferences.size(), 1);
     }
     @Test
@@ -52,10 +53,10 @@ public class RefSaveDaoTests {
         String notes = "this gave me goosebumps!";
         String timepoint = "00:00:00";
         TV tv = new TV(id, created, label, title, notes, LocalTime.parse(timepoint));
-        referenceDaoImpl.createRef(TEST_USER, tv);
-        Reference reference = referenceDaoImpl.readReference(TEST_USER, id);
+        referenceDao.createRef(TEST_USER, tv);
+        Reference reference = referenceDao.readReference(TEST_USER, id);
         assertEquals("tv is not equal to retrieved reference", reference, tv);
-        List<Reference> allReferences = referenceDaoImpl.readReferences(TEST_USER);
+        List<Reference> allReferences = referenceDao.readReferences(TEST_USER);
         assertEquals("size of allReferences is not 1", allReferences.size(), 1);
     }
     @Test
@@ -67,10 +68,10 @@ public class RefSaveDaoTests {
         String notes = "epic scene!";
         String timepoint = "02:04:38";
         Film film = new Film(id, created, label, title, notes, LocalTime.parse(timepoint));
-        referenceDaoImpl.createRef(TEST_USER, film);
-        Reference reference = referenceDaoImpl.readReference(TEST_USER, id);
+        referenceDao.createRef(TEST_USER, film);
+        Reference reference = referenceDao.readReference(TEST_USER, id);
         assertEquals("film is not equal to retrieved reference", reference, film);
-        List<Reference> allReferences = referenceDaoImpl.readReferences(TEST_USER);
+        List<Reference> allReferences = referenceDao.readReferences(TEST_USER);
         assertEquals("size of allReferences is not 1", allReferences.size(), 1);
     }
     @Test
@@ -82,10 +83,10 @@ public class RefSaveDaoTests {
         String notes = "this is the coolest website ever!";
         URL url = new URL("https://dev.mysql.com/doc");
         Website website = new Website(id, created, label, title, notes, url);
-        referenceDaoImpl.createRef(TEST_USER, website);
-        Reference reference = referenceDaoImpl.readReference(TEST_USER, id);
+        referenceDao.createRef(TEST_USER, website);
+        Reference reference = referenceDao.readReference(TEST_USER, id);
         assertEquals("website is not equal to retrieved reference", reference, website);
-        List<Reference> allReferences = referenceDaoImpl.readReferences(TEST_USER);
+        List<Reference> allReferences = referenceDao.readReferences(TEST_USER);
         assertEquals("size of allReferences is not 1", allReferences.size(), 1);
     }
     @Test
@@ -118,11 +119,11 @@ public class RefSaveDaoTests {
         TV tv = new TV(idTV, createdTV, labelTV, titleTV, notesTV, LocalTime.parse(timepointTV));
         Film film = new Film(idFilm, createdFilm, labelFilm, titleFilm, notesFilm, LocalTime.parse(timepointFilm));
         Website website = new Website(idWebsite, createdWebsite, labelWebsite, titleWebsite, notesWebsite, url);
-        referenceDaoImpl.createRef(TEST_USER, book);
-        referenceDaoImpl.createRef(TEST_USER, tv);
-        referenceDaoImpl.createRef(TEST_USER, film);
-        referenceDaoImpl.createRef(TEST_USER, website);
-        List<Reference> allReferences = referenceDaoImpl.readReferences(TEST_USER);
+        referenceDao.createRef(TEST_USER, book);
+        referenceDao.createRef(TEST_USER, tv);
+        referenceDao.createRef(TEST_USER, film);
+        referenceDao.createRef(TEST_USER, website);
+        List<Reference> allReferences = referenceDao.readReferences(TEST_USER);
         assertEquals("Size of allReferences is not 4", allReferences.size(), 4);
         assertTrue("allReferences does not contain book", allReferences.contains(book));
         assertTrue("allReferences does not contain tv", allReferences.contains(tv));
@@ -160,24 +161,24 @@ public class RefSaveDaoTests {
         Film film = new Film(idFilm, createdFilm, labelFilm, titleFilm, notesFilm, LocalTime.parse(timepointFilm));
         Website website = new Website(idWebsite, createdWebsite, labelWebsite, titleWebsite, notesWebsite, url);
 
-        referenceDaoImpl.createRef(TEST_USER, book);
-        referenceDaoImpl.createRef(TEST_USER, tv);
-        referenceDaoImpl.createRef(TEST_USER, film);
-        referenceDaoImpl.createRef(TEST_USER, website);
+        referenceDao.createRef(TEST_USER, book);
+        referenceDao.createRef(TEST_USER, tv);
+        referenceDao.createRef(TEST_USER, film);
+        referenceDao.createRef(TEST_USER, website);
 
-        List<Reference> books = referenceDaoImpl.readReferencesByCategory(TEST_USER, Category.BOOK);
+        List<Reference> books = referenceDao.readReferencesByCategory(TEST_USER, Category.BOOK);
         assertTrue("books does not contain book", books.contains(book));
         assertEquals("size of books is not 1", books.size(), 1);
 
-        List<Reference> tvs = referenceDaoImpl.readReferencesByCategory(TEST_USER, Category.TV);
+        List<Reference> tvs = referenceDao.readReferencesByCategory(TEST_USER, Category.TV);
         assertTrue("tvs does not contain tv", tvs.contains(tv));
         assertEquals("size of tvs is not 1", tvs.size(), 1);
 
-        List<Reference> films = referenceDaoImpl.readReferencesByCategory(TEST_USER, Category.FILM);
+        List<Reference> films = referenceDao.readReferencesByCategory(TEST_USER, Category.FILM);
         assertTrue("films does not contain film", films.contains(film));
         assertEquals("size of films is not 1", films.size(), 1);
 
-        List<Reference> websites = referenceDaoImpl.readReferencesByCategory(TEST_USER, Category.WEBSITE);
+        List<Reference> websites = referenceDao.readReferencesByCategory(TEST_USER, Category.WEBSITE);
         assertTrue("websites does not contain website", websites.contains(website));
         assertEquals("size of websites is not 1", websites.size(), 1);
     }
@@ -191,13 +192,13 @@ public class RefSaveDaoTests {
         String notes = "That was epic!";
         int pageNumber = 195;
         Book book = new Book(id, created, label, title, notes, pageNumber);
-        referenceDaoImpl.createRef(TEST_USER, book);
+        referenceDao.createRef(TEST_USER, book);
         book.setNotes("That was an epic battle!");
         book.setPageNumber(145);
-        referenceDaoImpl.updateRef(TEST_USER, book);
-        Reference reference = referenceDaoImpl.readReference(TEST_USER, id);
+        referenceDao.updateRef(TEST_USER, book);
+        Reference reference = referenceDao.readReference(TEST_USER, id);
         assertEquals("book is not equal to updated reference", reference, book);
-        List<Reference> allReferences = referenceDaoImpl.readReferences(TEST_USER);
+        List<Reference> allReferences = referenceDao.readReferences(TEST_USER);
         assertEquals("size of allReferences is not 1", allReferences.size(), 1);
     }
 
@@ -210,15 +211,15 @@ public class RefSaveDaoTests {
         String notes = "this gave me goosebumps!";
         String timepoint = "00:00:00";
         TV tv = new TV(id, created, label, title, notes, LocalTime.parse(timepoint));
-        referenceDaoImpl.createRef(TEST_USER, tv);
+        referenceDao.createRef(TEST_USER, tv);
         tv.setLabel("Mr Robot season 1 finale");
         tv.setTitle("Mr Robot S01E10");
         tv.setNotes("Don't open the trunk!!!!");
         tv.setTimepoint(LocalTime.parse("00:48:29"));
-        referenceDaoImpl.updateRef(TEST_USER, tv);
-        Reference reference = referenceDaoImpl.readReference(TEST_USER, id);
+        referenceDao.updateRef(TEST_USER, tv);
+        Reference reference = referenceDao.readReference(TEST_USER, id);
         assertEquals("tv is not equal to updated reference", reference, tv);
-        List<Reference> allReferences = referenceDaoImpl.readReferences(TEST_USER);
+        List<Reference> allReferences = referenceDao.readReferences(TEST_USER);
         assertEquals("size of allReferences is not 1", allReferences.size(), 1);
     }
 
@@ -231,13 +232,13 @@ public class RefSaveDaoTests {
         String notes = "epic scene!";
         String timepoint = "02:04:38";
         Film film = new Film(id, created, label, title, notes, LocalTime.parse(timepoint));
-        referenceDaoImpl.createRef(TEST_USER, film);
+        referenceDao.createRef(TEST_USER, film);
         film.setNotes("epic scene, Boromir redeems himself!");
         film.setTimepoint(LocalTime.parse("03:04:38"));
-        referenceDaoImpl.updateRef(TEST_USER, film);
-        Reference reference = referenceDaoImpl.readReference(TEST_USER, id);
+        referenceDao.updateRef(TEST_USER, film);
+        Reference reference = referenceDao.readReference(TEST_USER, id);
         assertEquals("film is not equal to updated reference", reference, film);
-        List<Reference> allReferences = referenceDaoImpl.readReferences(TEST_USER);
+        List<Reference> allReferences = referenceDao.readReferences(TEST_USER);
         assertEquals("size of allReferences is not 1", allReferences.size(), 1);
     }
 
@@ -250,15 +251,15 @@ public class RefSaveDaoTests {
         String notes = "this is the coolest website ever!";
         URL url = new URL("https://dev.mysql.com/doc");
         Website website = new Website(id, created, label, title, notes, url);
-        referenceDaoImpl.createRef(TEST_USER, website);
+        referenceDao.createRef(TEST_USER, website);
         website.setUrl(new URL("https://start.spring.io"));
         website.setLabel("Create a new Spring Boot project");
         website.setTitle("Spring Initializr");
         website.setNotes("this is actually the ultimate site");
-        referenceDaoImpl.updateRef(TEST_USER, website);
-        Reference reference = referenceDaoImpl.readReference(TEST_USER, id);
+        referenceDao.updateRef(TEST_USER, website);
+        Reference reference = referenceDao.readReference(TEST_USER, id);
         assertEquals("website is not equal to updated reference", reference, website);
-        List<Reference> allReferences = referenceDaoImpl.readReferences(TEST_USER);
+        List<Reference> allReferences = referenceDao.readReferences(TEST_USER);
         assertEquals("size of allReferences is not 1", allReferences.size(), 1);
     }
 
@@ -278,19 +279,19 @@ public class RefSaveDaoTests {
         URL url = new URL("https://dev.mysql.com/doc");
         Book book = new Book(idBook, createdBook, labelBook, titleBook, notesBook, pageNumber);
         Website website = new Website(idWebsite, createdWebsite, labelWebsite, titleWebsite, notesWebsite, url);
-        referenceDaoImpl.createRef(TEST_USER, book);
-        referenceDaoImpl.createRef(TEST_USER, website);
-        List<Reference> allReferences = referenceDaoImpl.readReferences(TEST_USER);
+        referenceDao.createRef(TEST_USER, book);
+        referenceDao.createRef(TEST_USER, website);
+        List<Reference> allReferences = referenceDao.readReferences(TEST_USER);
         assertEquals("size of allReferences is not 2", allReferences.size(), 2);
         assertTrue("allReferences does not contain book", allReferences.contains(book));
         assertTrue("allReferences does not contain website", allReferences.contains(website));
-        referenceDaoImpl.deleteRef(TEST_USER, book);
-        allReferences = referenceDaoImpl.readReferences(TEST_USER);
+        referenceDao.deleteRef(TEST_USER, book);
+        allReferences = referenceDao.readReferences(TEST_USER);
         assertEquals("size of allReferences is not 1", allReferences.size(), 1);
         assertFalse("allReferences contains book", allReferences.contains(book));
         assertTrue("allReferences does not contain website", allReferences.contains(website));
-        referenceDaoImpl.deleteRef(TEST_USER, website);
-        allReferences = referenceDaoImpl.readReferences(TEST_USER);
+        referenceDao.deleteRef(TEST_USER, website);
+        allReferences = referenceDao.readReferences(TEST_USER);
         assertTrue("allReferences is not empty", allReferences.isEmpty());
     }
 

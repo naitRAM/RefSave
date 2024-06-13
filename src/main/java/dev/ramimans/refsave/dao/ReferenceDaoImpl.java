@@ -15,7 +15,7 @@ import dev.ramimans.refsave.dto.Website;
 import static dev.ramimans.refsave.dao.mapper.ReferenceFieldsExtractor.*;
 
 @Component
-public class ReferenceDaoImpl {
+public class ReferenceDaoImpl implements ReferenceDao{
     @Autowired
     JdbcTemplate jdbc;
 
@@ -119,7 +119,6 @@ public class ReferenceDaoImpl {
         final String query ="DELETE FROM Ref WHERE user_id = (SELECT ID FROM Users WHERE username = ?) AND id = ?";
         jdbc.update(query, username, ref.getId());
     }
-
 
 
 }

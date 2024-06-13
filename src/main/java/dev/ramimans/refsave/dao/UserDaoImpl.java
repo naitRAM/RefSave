@@ -1,17 +1,20 @@
 package dev.ramimans.refsave.dao;
 
+import dev.ramimans.refsave.dao.mapper.UserDao;
 import dev.ramimans.refsave.dto.User;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Component
-public class UserDaoImpl {
+public class UserDaoImpl implements UserDao {
     @Autowired
     JdbcTemplate jdbc;
     @Autowired
@@ -26,7 +29,7 @@ public class UserDaoImpl {
         return jdbc.queryForObject(query, new UserMapper(), username);
     }
 
-    public void createUser (User user) {
+    public void createUser (@RequestBody @Valid User user) {
         String query = "Insert Into Users (username, passphrase, id) Values (?, ?, ?)";
         jdbc.update(query, user.getUsername(), passwordEncoder.encode(user.getPassword()), user.getId());
     }
