@@ -30,10 +30,3 @@ category_id bit(3) not null,
 foreign key fk_ref_users (user_id) references users(id),
 foreign key fk_ref_category (category_id) references category(id)
 );
-
--- insert some reference categories
-Insert into Category (id, title) values (1, "TV"),
-(2, "Film"), (3, "Book"), (4, "Website");
-
-
-
